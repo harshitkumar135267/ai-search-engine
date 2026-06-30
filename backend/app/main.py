@@ -6,11 +6,12 @@ def home():
         "message":"Welcome to my AI Search Engine!"
     }
 @app.get("/search")
-def search(query:str):
+def search(query:str,limit:int):  
     if query=="":
         return{
             "error":"Please enter a search term"
         }
     return{
-        "search":query
+        "search":query,
+        "limit":limit
     }
