@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from .services import search_results
 app=FastAPI()
 @app.get("/")
 def home():
@@ -12,30 +13,18 @@ def search(query:str,limit:int=5):
         return{
             "error":"Please enter a search term"
         }
-    search_data = {
-        "python": [
-            {
-                "title": "Python Offical Website",
-                "Url": "https://www.python.org"
-            },
-            {
-                "title": "W3Schools Python",
-                "url": "https://www.w3schools.com/python"
-            }
-        ],
-        "java":[
-            {
-                "title": "Oracle Java",
-                "url": "https://www.oracle.com/java/"
-            }
-        ]
-    }
-    results = search_data.get(query.lower(),["result not found"])
-    return{
-        "search":query,
-        "limit":limit,
-        "results":results
-    }
+    if limit<=0:
+        return{
+            "error":"Limit must be greater than 0"
+        }
+    results = search_results(query,limit)
+    if len(results)==0:
+        return{
+            "search":query,
+            "limit":limit,
+            "results":[],
+            "message":"No results found"
+        }
 @app.get("/user/{name}")
 def get_user(name:str):
     return{
