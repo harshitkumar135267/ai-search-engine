@@ -1,13 +1,20 @@
 from fastapi import FastAPI
-from .services import search_results
+from .services import search_results,get_top_searches
+from .history import search_history
 app=FastAPI()
 @app.get("/")
 def home():
     return{
         "message":"Welcome to my AI Search Engine!"
     }
-@app.get("/search")
+@app.get("/history")
+def history():
+    return{
+        "History":search_history
+    }
 
+
+@app.get("/search")
 def search(query:str,limit:int=5):  
     if query=="":
         return{
@@ -25,6 +32,11 @@ def search(query:str,limit:int=5):
             "results":[],
             "message":"No results found"
         }
+    return{
+            "search":query,
+            "limit":limit,
+            "results":results
+    }
 @app.get("/user/{name}")
 def get_user(name:str):
     return{
@@ -35,4 +47,10 @@ def get_post(name:str,post_id:int):
     return{
         "user":name,
         "post_id":post_id  
+    }
+@app.get("/top-searches")
+def top_searches():
+    top=get_top_searches()
+    return{
+        "top_searches":top
     }
