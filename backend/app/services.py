@@ -7,7 +7,7 @@ def search_results(query,limit):
     for key in search_data:
         if query.lower() in key:
             search_history.append(key)
-            results.extend(search_data[key]) 
+            results.extend(search_data[key]["results"]) 
             
     return results[:limit]
 def get_top_searches():
@@ -18,4 +18,9 @@ def get_top_searches():
         else:
             counts[query]=1
     return counts
-            
+def search_suggestions(query,limit):
+    suggestions=[]
+    for key in search_data:
+        if query.lower() in key:
+            suggestions.append(key)
+    return suggestions[:limit]

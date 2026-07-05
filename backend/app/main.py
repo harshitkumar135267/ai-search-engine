@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .services import search_results,get_top_searches
+from .services import search_results,get_top_searches,search_suggestions
 from .history import search_history
 app=FastAPI()
 @app.get("/")
@@ -53,4 +53,10 @@ def top_searches():
     top=get_top_searches()
     return{
         "top_searches":top
+    }
+@app.get("/suggestions")
+def suggestions(query:str,limit:int=5):
+    suggestions=search_suggestions(query,limit)
+    return{
+        "suggestions":suggestions
     }
